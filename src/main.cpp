@@ -5,8 +5,8 @@ enum STATUS {BLUET, CABLE};
 int PINLEDCI=8;
 int PINLEDCO=9;
 
-int PINW=6;
-int PING=7;
+int PINWin=6, PINWout=4;
+int PINGin=7, PINGout=5;
 
 int deviceStatus=STATUS::BLUET;
 
@@ -28,24 +28,25 @@ void changeStatus(){
 
 void setup() {
 	Serial.begin(9600);
-  // initialize digital pin PIN as an output.
-  pinMode(PINW, INPUT);
-  pinMode(PING, INPUT);
   pinMode(PINLEDCI, INPUT);
   pinMode(PINLEDCO, OUTPUT);
 
+  pinMode(PINWin, INPUT);
+  pinMode(PINGin, INPUT);
   Serial.println("Board ready");
 }
 
 // the loop function runs over and over again forever
 void loop() {
 	int vw=0, vg=0;
-  vw=digitalRead(PINW);
-  vg=digitalRead(PING);
+  vw=analogRead(PINWin);
+  vg=analogRead(PINGin);
   Serial.print("green: "); Serial.println(vg);
   Serial.print("white: "); Serial.println(vw);
 
   if (digitalRead(PINLEDCI)==HIGH){
     changeStatus();
   }
+  analogWrite(PINWout, vw);
+  analogWrite(PINGout, vg);
 }
